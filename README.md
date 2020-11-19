@@ -1,7 +1,7 @@
 <h1>Assignment Submission Analysis</h1>
 <p>This is a complete Asssignment Submission Analysis. The project name is <b> WriteUp!</b>. This project is made completely on PHP.It has some exciting features like exporting table to excel, Arranging students assignment based on 
 student_id,title,marks,submission date.
-Hope this project helps you!!</p>
+Hope this project helps you!!🙂</p>
 <h2>Installation:</h2>
 <ul>
 <li>Download the entire project</li>
@@ -17,7 +17,8 @@ Hope this project helps you!!</p>
 <li>It provides teacher with some exciting features like exporting assignments table to exce</li>
 <li>It provides student to view all the assignment he/she has submitted</li>
 <h5>The site is built keeping all essential features in mind to make the assignment submission <br>
-for both teacher and student an easy task</h5>
+for both teacher and student an easy task</h5><br>
+
 
 
 
