@@ -1,0 +1,439 @@
+# Embedded file name: C:\Users\rsuman\Desktop\titan\Titan_CrankIntegrated\latest_using_queue.py
+import os, sys, time, subprocess
+import socket
+import datetime
+from datetime import datetime
+from thread import *
+import random
+import Queue
+import threading
+import CrankWaveFormSimulator
+que = Queue.Queue()
+
+def now():
+    abhi = datetime.now()
+    return str(abhi)
+
+
+def dat():
+    dt = datetime.now()
+    datee = dt.strftime('%d_%B_%Y')
+    return datee
+
+
+class titan:
+
+    def __init__(self):
+        global s
+        self._crank_required = False
+        self.crank_waveform_simulator = CrankWaveFormSimulator.CrankWaveFormSimulator()
+        vmm = subprocess.Popen(['VMMServer_FCAR1_BHCAN_Merged_v3.36.06.exe'], shell=True)
+        time.sleep(10)
+        s = socket.socket()
+        host = socket.gethostname()
+        port = 44455
+        s.connect((host, port))
+        s.send('hw_connect .\\PeakJ2534.dll \n')
+        time.sleep(5)
+        s.recv(1024)
+        s.send('is_hw_connected \n')
+        connection = s.recv(1024)
+        if connection == '1\n':
+            print 'VmmServer connected'
+        else:
+            print 'VmmServer is Not connected, Rerun the Script.'
+            quit()
+        s.send('diag_resp_time_after_pending 5000 \n')
+        s.recv(1024)
+        s.send('sig_set DAY_LGT_MD 1 \n')
+        s.send('screen_logs_update_off \n')
+        s.recv(1024)
+
+    def always(self):
+        global que
+        while True:
+            if not que.empty():
+                cmd = que.get()
+                s.send(cmd)
+                time.sleep(0.25)
+
+    def set_crank_requirement(self, is_crank_required):
+        self._crank_required = is_crank_required
+
+    def configuration(self):
+        que.put('sig_set VC_COUNTRY 2 \n')
+        print 'sig_set VC_COUNTRY :2 '
+        que.put('sig_set DEST 2 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'sig_set DEST : 2'
+        que.put('sig_set VC_MODEL_YEAR 21 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'sig_set VC_MODEL_YEAR : 21 '
+        que.put('sig_set NET_CFG_STAT_INT 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'NET_CFG_STAT_INT: 1'
+        que.put('sig_set NET_CFG_STAT_PT 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'NET_CFG_STAT_PT: 1'
+        que.put('sig_set VC_VehCfg1_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VehCfg1_Stat: 1'
+        que.put('sig_set VC_RVCM_Prsnt 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_RVCM_Prsnt: 1 '
+        que.put('sig_set VC_REAR_CMRA_DLY_CSO 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_REAR_CMRA_DLY_CSO: 1 '
+        que.put('sig_set VC_VehCfg2_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VehCfg2_Stat: 1'
+        que.put('sig_set VC_VehCfg3_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VehCfg3_Stat: 1'
+        que.put('sig_set VC_VehCfg4_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VehCfg4_Stat: 1'
+        que.put('sig_set RVC_SK_PRSNT 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'RVC_SK_PRSNT: 1'
+        que.put('sig_set VC_VehCfg5_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VehCfg5_Stat: 1'
+        que.put('sig_set VC_VehCfg6_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VehCfg6_Stat: 1'
+        que.put('sig_set VC_VehCfg7_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VehCfg7_Stat: 1'
+        que.put('sig_set VC_VehCfg8_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VehCfg8_Stat: 1'
+        que.put('sig_set EC_ECUCfg3_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'EC_ECUCfg3_Stat: 1'
+        que.put('sig_set EC_ECUCfg16_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'EC_ECUCfg16_Stat: 1'
+        que.put('sig_set VC_VehCfgCSO1_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VehCfgCSO1_Stat 1: 1'
+        que.put('sig_set VC_VehCfgCSO2_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VehCfgCSO2_Stat: 1'
+        que.put('sig_set VC_VehCfgCSO3_Stat 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        que.put('sig_set External_Port_Type 3 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'External_Port_Type: 3'
+        que.put('sig_set VC_VEH_BRAND 3 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'VC_VEH_BRAND: 3'
+        que.put('sig_set CABIN_EQ 79 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'CABIN_EQ: 79'
+        que.put('sig_set LANG_C 1 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        que.put('sig_set PANEL_INTS 200 \n')
+        s.recv(1024)
+        time.sleep(0.15)
+        print 'PANEL_INTS: 200 '
+
+    def log_replay_start(self, logfile):
+        que.put('replay_start ' + str(logfile) + ' realtime \n')
+        s.recv(1024)
+        print str(logfile) + 'logs is being replay(realtime)'
+
+    def log_replay_stop(self):
+        que.put('replay_stop \n')
+        s.recv(1024)
+        print 'Log replay has been stoped'
+
+    def burst_load_stop(self):
+        self.intrrupt = True
+        print 'Burst load has been interuption'
+
+    def burst_load(self):
+        print 'Burst load started'
+        self.intrrupt = False
+        que.put('diag_req ETM 19 02 0F \n')
+        time.sleep(2)
+        que.put('diag_req ETM 14 ff ff ff \n')
+        time.sleep(5)
+        while True:
+            que.put('diag_req ETM 10 03 \n')
+            time.sleep(0.5)
+            que.put('diag_req ETM 19 02 FF \n')
+            time.sleep(0.5)
+            que.put('diag_req ETM 10 01 \n')
+            time.sleep(0.5)
+            que.put('diag_req ETM 19 02 FF \n')
+            time.sleep(0.5)
+            if self.intrrupt:
+                break
+
+    def enable_burst_load_cyclic(self, interval_time, burst_load_active_time):
+        self.burst_load_cyclic_intrrupt = False
+        while True:
+            tim = 0
+            tymm = 0
+            for tim in range(0, interval_time):
+                time.sleep(1)
+                if self.burst_load_cyclic_intrrupt:
+                    break
+
+            if self.burst_load_cyclic_intrrupt:
+                break
+            e_b_l_c = threading.Thread(target=self.burst_load)
+            e_b_l_c.start()
+            for tymm in range(0, burst_load_active_time):
+                time.sleep(1)
+                if self.burst_load_cyclic_intrrupt:
+                    break
+
+            if self.burst_load_cyclic_intrrupt:
+                break
+            self.burst_load_stop()
+
+    def disable_burst_load_cyclic(self):
+        self.burst_load_stop()
+        self.burst_load_cyclic_intrrupt = True
+
+    def bus_load_replay(self):
+        que.put('can_sw_periodic_tx_always_on 002 fe ff 3f ff ff ff ff ff 100 \n')
+        time.sleep(1)
+        que.put('can_sw_periodic_tx_always_on 011 fe ff 3f ff ff ff ff ff 100 \n')
+        time.sleep(1)
+        que.put('can_sw_periodic_tx_always_on 111 fe ff 3f ff ff ff ff ff 100 \n')
+        time.sleep(1)
+        s.recv(1024)
+        print 'CAB BUS Load has been increased'
+
+    def bus_load_simulation(self):
+        que.put('can_sw_periodic_tx_on 002 fe ff 3f ff ff ff ff ff 100 \n')
+        time.sleep(1)
+        que.put('can_sw_periodic_tx_on 011 fe ff 3f ff ff ff ff ff 100 \n')
+        time.sleep(1)
+        que.put('can_sw_periodic_tx_on 111 fe ff 3f ff ff ff ff ff 100 \n')
+        time.sleep(1)
+        s.recv(1024)
+        print 'CAB BUS Load has been increased'
+
+    def bus_load_stop(self):
+        que.put('can_sw_periodic_tx_off 0 \n')
+        time.sleep(1)
+        que.put('can_sw_periodic_tx_off 1 \n')
+        time.sleep(1)
+        que.put('can_sw_periodic_tx_off 2 \n')
+        time.sleep(1)
+
+    def enable_logging(self):
+        path_for_logs = os.getcwd()
+        que.put('log_open ' + path_for_logs + '\\' + now().replace(':', '') + '.txt \n')
+        s.recv(1024)
+        time.sleep(1)
+
+    def disable_logging(self):
+        que.put('log_close \n')
+        s.recv(1024)
+
+    def sim_awake(self):
+        if not self._crank_required:
+            que.put('sim_awake \n')
+            s.recv(1024)
+        else:
+            self.crank_waveform_simulator.connect_to_power_supply()
+            self.crank_waveform_simulator.pick_random_waveform()
+            que.put('sim_on CBC \n')
+            s.recv(1024)
+            que.put('sig_set CmdIgnStat 3 \n')
+            s.recv(1024)
+            que.put('sig_set CmdIgnStat 5 \n')
+            s.recv(1024)
+            self.crank_waveform_simulator.simulate_crank_waveform()
+            que.put('sig_set CmdIgnStat 4 \n')
+            s.recv(1024)
+            self.crank_waveform_simulator.disconnect_power_suppply()
+
+    def sim_sleep(self):
+        que.put('sim_sleep \n')
+        s.recv(1024)
+
+    def sim_awake_all_node(self):
+        que.put('sim_awake_all \n')
+        s.recv(1024)
+        que.put('sim_off ETM \n')
+        self.sim_awake()
+        s.recv(1024)
+
+    def speed_change_stop(self):
+        self.intrupt = True
+        print 'speed change has been stopped'
+        que.put('sig_set VEH_SPEED 0 \n')
+        print 'Speed=0'
+        que.put('sig_set PRND_STAT 0 \n')
+        print 'gear=Park'
+
+    def speed_change(self):
+        self.intrupt = False
+        que.put('sig_set PRND_STAT 4 \n')
+        print 'Gear: Drive Mode'
+        print 'Random Speed Change has been activated'
+        while True:
+            spd = str(random.randint(1, 54))
+            que.put('sig_set VEH_SPEED ' + spd + ' \n')
+            s.recv(1024)
+            time.sleep(2)
+            if self.intrupt:
+                break
+
+    def gear(self, gear_postion):
+        if gear_postion == 'Park':
+            que.put('sig_set PRND_STAT 0 \n')
+            s.recv(1024)
+            print 'Gear has been changed to: Park'
+        elif gear_postion == 'Revrse':
+            que.put('sig_set PRND_STAT 1 \n')
+            s.recv(1024)
+            print 'Gear has been changed to: Reverse'
+        elif gear_postion == 'Neutral':
+            que.put('sig_set PRND_STAT 2 \n')
+            s.recv(1024)
+            print 'Gear has been changed to: Neutral'
+        elif gear_postion == 'Drive':
+            que.put('sig_set PRND_STAT 4 \n')
+            s.recv(1024)
+            print 'Gear has been changed to: Drive'
+        else:
+            print 'Unknow gear selected'
+
+    def Pattern1(self):
+        self.sim_awake_all_node()
+        time.sleep(30)
+        self.gear('Revrse')
+        time.sleep(5)
+        self.gear('Neutral')
+        time.sleep(5)
+        self.gear('Park')
+        time.sleep(5)
+        pttrn1 = threading.Thread(target=self.speed_change)
+        pttrn1.start()
+
+    def Pattern1_stop(self):
+        self.speed_change_stop()
+        self.sim_sleep()
+
+    def Pattern2(self):
+        self.sim_awake_all_node()
+        time.sleep(30)
+        pttrn2 = threading.Thread(target=self.speed_change)
+        pttrn2.start()
+        pttrn2_2 = threading.Thread(target=self.enable_burst_load_cyclic, args=(300, 600))
+        pttrn2_2.start()
+
+    def Pattern2_stop(self):
+        self.speed_change_stop()
+        self.disable_burst_load_cyclic()
+        self.sim_sleep()
+
+    def Pattern3(self):
+        self.sim_awake_all_node()
+        time.sleep(30)
+        self.bus_load_simulation()
+        time.sleep(2)
+        pttrn3 = threading.Thread(target=self.speed_change)
+        pttrn3.start()
+
+    def Pattern3_stop(self):
+        self.speed_change_stop()
+        self.bus_load_stop()
+        self.sim_sleep()
+
+    def Pattern4(self):
+        self.sim_awake_all_node()
+        time.sleep(30)
+        self.gear('Park')
+        que.put('sig_set VEH_SPEED 0 \n')
+        self.bus_load_simulation()
+        time.sleep(2)
+
+    def Pattern4_stop(self):
+        self.bus_load_stop()
+        self.sim_sleep()
+
+    def Pattern5(self):
+        self.sim_awake_all_node()
+        time.sleep(30)
+        self.gear('Park')
+        que.put('sig_set VEH_SPEED 0 \n')
+
+    def Pattern5_stop(self):
+        self.sim_sleep()
+
+    def Pattern6(self):
+        self.sim_awake_all_node()
+        time.sleep(30)
+        self.bus_load_simulation()
+        time.sleep(2)
+        pttrn6 = threading.Thread(target=self.speed_change)
+        pttrn6.start()
+        pttrn6_2 = threading.Thread(target=self.enable_burst_load_cyclic, args=(600, 300))
+        pttrn6_2.start()
+
+    def Pattern6_stop(self):
+        self.bus_load_stop()
+        self.speed_change_stop()
+        self.disable_burst_load_cyclic()
+        self.sim_sleep()
+
+    def Pattern7(self):
+        self.sim_awake_all_node()
+        time.sleep(30)
+        self.gear('Park')
+        que.put('sig_set VEH_SPEED 0 \n')
+        self.bus_load_simulation()
+        time.sleep(2)
+        pttrn7_2 = threading.Thread(target=self.enable_burst_load_cyclic, args=(600, 300))
+        pttrn7_2.start()
+
+    def Pattern7_stop(self):
+        self.bus_load_stop()
+        self.disable_burst_load_cyclic()
+        self.sim_sleep()
+
+    def Pattern8(self):
+        que.put('sim_on CBC \n')
+        self.sim_awake()
+        self.gear('Park')
+        self.bus_load_simulation()
+        time.sleep(2)
+        pttrn8_2 = threading.Thread(target=self.enable_burst_load_cyclic, args=(600, 300))
+        pttrn8_2.start()
+
+    def Pattern8_stop(self):
+        self.bus_load_stop()
+        self.disable_burst_load_cyclic()
+        self.sim_sleep()
